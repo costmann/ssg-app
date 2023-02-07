@@ -1,0 +1,47 @@
+table {
+  width: 100%;
+}
+
+.table-container {
+  position: relative;
+  //height: calc(100vh - 280px);
+  overflow-y: auto;
+  overflow-x: auto;
+  background-color: white;
+}
+
+
+.mat-column-datetime {
+  flex: 0 0 140px !important;
+  width: 140px !important;
+}
+
+.mat-column-state {
+  padding-left: 10px;
+  flex: 0 0 150px !important;
+  width: 150px !important;
+}
+
+
+.mat-column-recipient {
+  padding-left: 10px;
+  flex: 0 0 200px !important;
+  width: 200px !important;
+}
+
+.mat-column-notes {
+  padding-left: 10px;
+}
+
+
+.mat-column-user {
+  padding-left: 10px;
+  flex: 0 0 200px !important;
+  width: 200px !important;
+}
+
+.mat-column-action {
+  flex: 0 0 70px !important;
+  width: 70px !important;
+  text-align: end;
+}

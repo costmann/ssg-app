@@ -1,0 +1,120 @@
+<!-- <div class="text-2xl font-bold px-1 py-1">{{ 'Resources' | translate}}</div> -->
+<div class="mat-elevation-z0" *ngIf="(issue$ | async) as issue">
+
+  <mat-toolbar class="bg-transparent">
+    <mat-toolbar-row>
+      <div class="flex space-x-4" >
+        <button color="warn" mat-raised-button *ngFor="let c of commands$ | async; let i = index" (click)="exec(c, issue)">
+          <mat-icon class="material-icons-outlined">{{ c.commandName | commandIcon}}</mat-icon>
+          <span>{{ c.commandName | translate}}</span>
+        </button>
+      </div>
+      <span class="flex-auto"></span>
+      <button mat-button (click)="closeIssue.emit()" matTooltip="{{ 'Close' | translate}}" matTooltipClass="app-tooltip" matTooltipPosition="before">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar-row>
+
+
+
+  </mat-toolbar>
+
+  <div class="h-4">
+    <mat-progress-bar mode="indeterminate" mode="query" *ngIf="false"></mat-progress-bar>
+  </div>
+  <div class="page-container">
+
+    <div class="flex flex-col space-y-4 px-4">
+
+      <div class="flex flex-col space-y-2 px-4 py-4 border-2 border-brand-primary rounded-xl">
+        <div class="flex justify-between items-center">
+          <h2>{{ issue.code }}</h2>
+          <div class="rounded-md font-bold py-1 text-center text-lg w-36 h-9 mt-3"
+            [ngClass]="{
+              'bg-red-200 text-red-900':issue.stateCode === 'I',
+              'bg-green-200 text-green-900':issue.stateCode === 'O',
+              'bg-gray-200 text-gray-900':issue.stateCode === 'S',
+              'bg-black text-white':issue.stateCode === 'C',
+              'bg-white text-red-900':issue.stateCode === 'R'}">
+            {{issue.stateName | translate}}
+          </div>
+        </div>
+
+        <div class="flex space-x-2">
+          <mat-form-field appearance="outline" class="flex-1" *ssgUser="issue.issuedBy; let name = name; let email = email">
+            <mat-label>{{ 'Author' | translate}}</mat-label>
+            <input matInput [value]="name" [readonly]="true">
+            <button matSuffix mat-icon-button aria-label="Email" (click)="mailTo(email)" *ngIf="!!email"  matTooltip="{{ email }}" matTooltipClass="app-tooltip" >
+              <mat-icon class="material-icons-outlined">email</mat-icon>
+            </button>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="flex-1">
+            <mat-label>{{ 'Date and time of issue' | translate}}</mat-label>
+            <input matInput value="{{ issue.issuedAt | date:'dd/MM/yy HH:mm' }}" [readonly]="true">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="flex-1" *ssgUser="issue.recipientUser; let name = name; let email = email">
+            <mat-label>{{ 'Recipient' | translate}}</mat-label>
+            <input matInput [value]="name" [readonly]="true">
+            <button matSuffix mat-icon-button aria-label="Email" (click)="mailTo(email)" *ngIf="!!email"  matTooltip="{{ email }}" matTooltipClass="app-tooltip" >
+              <mat-icon class="material-icons-outlined">email</mat-icon>
+            </button>
+          </mat-form-field>
+
+
+        </div>
+
+        <div class="flex space-x-2">
+          <mat-form-field appearance="outline" class="flex-1">
+            <mat-label>{{ 'Thematic area' | translate}}</mat-label>
+            <input matInput [value]="issue.areaDescription" [readonly]="true">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="flex-1" *ssgUser="issue.responsibleUser; let name = name; let email = email">
+            <mat-label>{{ 'Responsible' | translate}}</mat-label>
+            <input matInput [value]="name" [readonly]="true">
+            <button matSuffix mat-icon-button aria-label="Email" (click)="mailTo(email)" *ngIf="!!email"  matTooltip="{{ email }}" matTooltipClass="app-tooltip" >
+              <mat-icon class="material-icons-outlined">email</mat-icon>
+            </button>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="flex-1" *ssgUser="issue.delegateUser; let name = name; let email = email">
+            <mat-label>{{ 'Delegate' | translate}}</mat-label>
+            <input matInput [value]="name" [readonly]="true">
+            <button matSuffix mat-icon-button aria-label="Email" (click)="mailTo(email)" *ngIf="!!email"  matTooltip="{{ email }}" matTooltipClass="app-tooltip" >
+              <mat-icon class="material-icons-outlined">email</mat-icon>
+            </button>
+          </mat-form-field>
+
+        </div>
+
+        <div class="flex space-x-2">
+          <mat-form-field appearance="outline" class="flex-1">
+            <mat-label>{{ 'Plant' | translate}}</mat-label>
+            <input matInput [value]="issue.plantDescription" [readonly]="true">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="flex-1">
+            <mat-label>{{ 'Geothermal area' | translate}}</mat-label>
+            <input matInput [value]="issue.plantSiteName" [readonly]="true">
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'Description' | translate }}</mat-label>
+          <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" [readonly]="true">{{ issue.description }}</textarea>
+        </mat-form-field>
+      </div>
+
+      <app-attributes-list [issueId]="issue.id" ></app-attributes-list>
+      <!-- <div class="px-4 py-4 border-2 border-brand-primary rounded-xl"></div> -->
+
+      <app-steps-list [issueId]="issue.id"></app-steps-list>
+      <!-- <div class="px-4 py-4 border-2 border-brand-primary rounded-xl"></div> -->
+
+    </div>
+
+  </div>
+
+</div>

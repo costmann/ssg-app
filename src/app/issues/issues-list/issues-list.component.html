@@ -1,0 +1,198 @@
+<div class="text-2xl font-bold px-1 py-1">{{ 'Issues' | translate}}</div>
+<div class="mat-elevation-z8">
+
+  <mat-toolbar class="bg-transparent">
+
+    <div class="flex space-x-4 text-sm items-center mt-5">
+      
+      <mat-form-field>
+        <mat-label>{{'Search' | translate}}</mat-label>
+        <input matInput placeholder="{{'Search' | translate}}" type="text" autocomplete="off" [(ngModel)]="filter.filterQuery" #search>
+        <button [class.invisible]="!filter.filterQuery" matSuffix mat-icon-button (click)="clearSearch()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{ 'In' | translate}}</mat-label>
+        <mat-select [(ngModel)]="filter.filterColumn" (selectionChange)="loadData()">
+          <mat-option *ngFor="let f of fields" [value]="f.name">
+            {{f.description | translate}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{ 'State' | translate}}</mat-label>
+        <mat-select multiple [value]="filter.filterStates" (selectionChange)="applyFilterState($event)">
+          <mat-option *ngFor="let s of states$ | async" [value]="s.code">
+            {{s.name | translate}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <span class="flex-auto"></span>
+    <div class="mr-2">
+      <button mat-raised-button (click)="createIssue()" color="warn">
+        <div class="flex items-center space-x-2">
+          <mat-icon class="material-icons-outlined">report_problem</mat-icon>
+          <span>{{'New incident' | translate}}</span>
+        </div>
+      </button>
+    </div>
+
+  </mat-toolbar>
+  <div class="h-1">
+    <mat-progress-bar mode="indeterminate" mode="query" *ngIf="dataSource.loading$ | async as loading"></mat-progress-bar>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="table-container">
+    <table mat-table [dataSource]="dataSource" multiTemplateDataRows matSort [matSortActive]="filter.sortColumn" [matSortDirection]="filter.sortDirection">
+
+      <ng-container matColumnDef="code">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'Code' | translate }}</th>
+        <td mat-cell *matCellDef="let e" >
+          <span class="font-bold">{{e.code}}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="area">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'Area' | translate }}</th>
+        <td mat-cell *matCellDef="let e" >
+          {{e.areaDescription}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="plant">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'Plant' | translate }}</th>
+        <td mat-cell *matCellDef="let e" >
+          {{e.plantDescription}}
+        </td>
+      </ng-container>
+
+      <!-- <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'Description' | translate }}</th>
+        <td mat-cell *matCellDef="let e" >
+          {{e.description}}
+        </td>
+      </ng-container> -->
+
+      <ng-container matColumnDef="state">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'State' | translate }}</th>
+        <td mat-cell *matCellDef="let e" >
+          <div class="rounded-lg font-bold py-1 text-center text-base w-24"
+            [ngClass]="{
+              'bg-red-200 text-red-900':e.stateCode === 'I',
+              'bg-green-200 text-green-900':e.stateCode === 'O',
+              'bg-gray-200 text-gray-900':e.stateCode === 'S',
+              'bg-black text-white':e.stateCode === 'C',
+              'bg-white text-red-900':e.stateCode === 'R'}">
+              {{e.stateName | translate}}
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="issuedAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'Issued at' | translate }}</th>
+        <td mat-cell *matCellDef="let e" >
+          {{e.issuedAt | date:'dd/MM/yy HH:mm' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="lastUpdatedAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'Last updated at' | translate }}</th>
+        <td mat-cell *matCellDef="let e" >
+          {{e.lastUpdatedAt | date:'dd/MM/yy HH:mm' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="issuedBy">
+        <th mat-header-cell *matHeaderCellDef>{{ 'Author' | translate }}</th>
+        <td mat-cell *matCellDef="let e" >
+          {{ e.issuedBy | user }}
+        </td>
+      </ng-container>
+
+      <!-- <ng-container matColumnDef="recipientUser">
+        <th mat-header-cell *matHeaderCellDef>{{ 'Recipient' | translate }}</th>
+        <td mat-cell *matCellDef="let e" >
+          {{ e.recipientUser | user }}
+        </td>
+      </ng-container> -->
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let e">
+          <div class="flex justify-end items-center space-x-2">
+            <button mat-icon-button (click)="openIssue.emit(e)">
+              <mat-icon>open_in_new</mat-icon>
+            </button>
+            <button mat-icon-button (click)="expand(e)">
+              <mat-icon>{{ isExpanded(e) ? 'expand_less' : 'expand_more' }}</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+          <div class="issue-element-detail" [@detailExpand]="element.code == expandedElement ? 'expanded' : 'collapsed'">
+            <div class="flex flex-col my-4 ml-4 w-full">
+              <div class="grid grid-cols-3 gap-4 mb-4 px-0 py-0">
+
+                <div class="border-2 border-brand-primary rounded-lg px-2 py-2">
+                  <div class="font-light">{{ 'Responsible' | translate }}</div>
+                  <div class="px-1">
+                    <span class="font-bold">{{ element.responsibleUser | user }}</span>
+                    <span class="ml-2">{{ element.responsibleUser | user:'email' }}</span>
+                  </div>
+                </div>
+
+                <div class="border-2 border-brand-primary rounded-lg px-2 py-2">
+                  <div class="font-light">{{ 'Delegate' | translate }}</div>
+                  <div class="px-1">
+                    <span class="font-bold">{{ element.delegateUser | user }}</span>
+                    <span class="ml-2">{{ element.delegateUser | user:'email' }}</span>
+                  </div>
+                </div>
+
+                <div class="border-2 border-brand-primary rounded-lg px-2 py-2">
+                  <div class="font-light">{{ 'Recipient' | translate }}</div>
+                  <div class="px-1 flex space-x-2" *ngIf="element.recipientUser">
+                    <span class="font-bold">{{ element.recipientUser | user }}</span>
+                    <span>{{ element.recipientUser | user:'email' }}</span>
+                    <span>{{ element.recipientUser | user:'telephoneNumber' }}</span>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="flex flex-col w-full border-2 border-brand-primary rounded-lg px-2 py-2">
+                <div class="font-bold">{{ 'Description' | translate}}</div>
+                <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" [readonly]="true">{{ element.description }}</textarea>
+              </div>
+
+
+              <!-- <div class="flex justify-end">
+                <button mat-icon-button (click)="openIssue.emit(element)" matTooltip="{{ 'Details' | translate}}" matTooltipClass="app-tooltip" matTooltipPosition="before">
+                  <mat-icon>open_in_new</mat-icon>
+                </button>
+              </div> -->
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="custom-arrow"></tr>
+      <tr mat-row *matRowDef="let element; columns: displayedColumns;"
+        class="issue-element-row"
+        [class.issue-expanded-row]="isExpanded(element)">
+      </tr>
+
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="issue-detail-row"></tr>
+    </table>
+  </div>
+  <mat-paginator class="bg-slate-200" [length]="dataSource.length$ | async" [pageSize]="filter.pageSize" [pageIndex]="filter.pageIndex" [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
+</div>

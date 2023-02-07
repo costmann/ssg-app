@@ -1,0 +1,45 @@
+<h2 mat-dialog-title>{{ (!!data ? 'Edit Plant'  : 'Add Plant') | translate }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+  <mat-dialog-content class="mat-typography">
+    <div class="flex flex-col space-y-4">
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{'Code' | translate}}</mat-label>
+        <input cdkFocusInitial [formControl]="codeControl" matInput placeholder="" required maxlength="12" autocomplete="off" class="uppercase">
+        <mat-error *ngIf="codeControl.hasError('required')">
+          {{ 'Code is required' | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{'Name' | translate}}</mat-label>
+        <input [formControl]="nameControl" matInput placeholder="" required maxlength="255" autocomplete="off">
+        <mat-error *ngIf="nameControl.hasError('required')">
+          {{ 'Name is required' | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'Geothermal area' | translate}}</mat-label>
+        <mat-select [formControl]="siteControl" required>
+          <mat-option *ngFor="let s of sites$ | async" [value]="s.id">
+            {{ s.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="siteControl.hasError('required')">
+          {{ 'Site is required' | translate }}
+        </mat-error>
+      </mat-form-field>
+
+    </div>
+    <div class="h-8 flex justify-center">
+      <span class="text-red-700 font-bold text-lg">{{errorMessage | translate}}</span>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close [disabled]="saving">{{ 'Cancel' | translate }}</button>
+    <button mat-raised-button type="submit" color="primary" [disabled]="form.invalid || saving || !form.touched" >{{ (!!data ? 'Edit' : 'Add') | translate }}</button>
+  </mat-dialog-actions>
+</form>

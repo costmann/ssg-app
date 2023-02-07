@@ -1,0 +1,35 @@
+// .mat-list-item {
+//   color: #667790;
+//   .routeIcon {
+//     margin-right: 0px;
+//   }
+// }
+
+// .mat-list-item.active {
+//   background-color: #387a5b;
+//   color: white;
+//   border-top-right-radius: 25px;
+//   border-bottom-right-radius: 25px;
+// }
+
+.mat-list-item {
+  color: darkgray;
+  font-weight: bold;
+  .routeIcon {
+    margin-right: 0px;
+  }
+}
+
+.mat-list-item.active {
+  // background-color: #387a5b;
+  color: white;
+  font-weight: bold;
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+}
+
+.mat-list-item:hover {
+  color: white;
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+}

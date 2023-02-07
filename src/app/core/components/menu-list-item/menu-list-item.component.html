@@ -1,0 +1,16 @@
+<a mat-list-item [disableRipple]="true" class="hover:bg-black" [ngStyle]="{'padding-left': (depth * padding) + 'px'}" (click)="onItemSelected(item)" [ngClass]="{'active': (item.route !== undefined) ? router.isActive(item.route, true): false, 'expanded': expanded}">
+  <div class="flex space-x-2 px-2 text-white">
+    <mat-icon class="routeIcon material-icons-outlined" matTooltip="{{ (extended ? '' : item.displayName) | translate }}" matTooltipClass="nav-tooltip" matTooltipPosition="right" >{{item.iconName}}</mat-icon>
+    <span *ngIf="extended" class="">{{item.displayName | translate}}</span>
+    <span class="mt-2" *ngIf="!!item.children && item.children.length">
+      <mat-icon class="routeIcon material-icons-outlined" [@indicatorRotate]="expanded ? 'expanded': 'collapsed'">
+        chevron_right
+      </mat-icon>
+    </span>
+  </div>
+</a>
+<div *ngIf="expanded">
+  <app-menu-list-item *ngFor="let child of item.children" [item]="child" [extended]="extended" [depth]="depth+1" (itemSelected)="itemSelected.emit(child)">
+  </app-menu-list-item>
+</div>
+

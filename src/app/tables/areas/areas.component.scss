@@ -1,0 +1,71 @@
+table {
+  width: 100%;
+}
+
+.table-container {
+  position: relative;
+  // height: auto !important;
+  height: calc(100vh - 280px);
+  overflow-y: auto;
+  overflow-x: auto;
+  background-color: white;
+}
+
+.search-form-field {
+  width: 200px;
+}
+
+.mat-column-code {
+  flex: 0 0 100px !important;
+  width: 100px !important;
+}
+
+.mat-column-name {
+  padding-left: 10px;
+}
+
+.mat-column-responsible {
+  flex: 0 0 200px !important;
+  width: 200px !important;
+  padding-left: 10px;
+
+}
+
+.mat-column-delegate {
+  flex: 0 0 200px !important;
+  width: 200px !important;
+  padding-left: 10px;
+}
+
+.mat-column-plant {
+  flex: 0 0 110px !important;
+  width: 110px !important;
+  // padding-left: 10px;
+  text-align: center;
+}
+
+.mat-column-oncall {
+  flex: 0 0 80px !important;
+  width: 80px !important;
+  text-align: center;
+}
+
+.mat-column-issues {
+  flex: 0 0 80px !important;
+  width: 80px !important;
+  text-align: end;
+  padding-right: 10px;
+}
+
+.mat-column-attributes {
+  flex: 0 0 80px !important;
+  width: 80px !important;
+  text-align: end;
+  padding-right: 10px;
+}
+
+.mat-column-actions {
+  flex: 0 0 180px !important;
+  width: 180px !important;
+  text-align: end;
+}

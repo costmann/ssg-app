@@ -1,0 +1,86 @@
+<h2 mat-dialog-title>{{ (!!data ? 'Edit Thematic Area'  : 'Add Thematic Area') | translate }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+  <mat-dialog-content class="mat-typography">
+    <div class="flex flex-col space-y-4">
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{'Code' | translate}}</mat-label>
+        <input cdkFocusInitial [formControl]="codeControl" matInput placeholder="" required maxlength="12" autocomplete="off" class="uppercase">
+        <mat-error *ngIf="codeControl.hasError('required')">
+          {{ 'Code is required' | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{'Name' | translate}}</mat-label>
+        <input [formControl]="nameControl" matInput placeholder="" required maxlength="255" autocomplete="off">
+        <mat-error *ngIf="nameControl.hasError('required')">
+          {{ 'Name is required' | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{'Plant setting' | translate}}</mat-label>
+        <mat-select [formControl]="plantSettingControl" required>
+          <mat-option value="O">{{'Optional' | translate}}</mat-option>
+          <mat-option value="Y">{{'Yes' | translate}}</mat-option>
+          <mat-option value="N">{{'No' | translate}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="plantSettingControl.hasError('required')">
+          {{ 'Field required' | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'Responsible' | translate}}</mat-label>
+        <input type="text" onClick="this.setSelectionRange(0, this.value.length)"
+               placeholder=""
+               matInput
+               [formControl]="responsibleControl"
+               [matAutocomplete]="responsible"
+               spellcheck="false"
+               required>
+        <mat-autocomplete #responsible="matAutocomplete" [displayWith]="displayName">
+          <mat-option *ngFor="let r of responsibles$ | async" [value]="r">
+            {{r.displayName}}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="responsibleControl.hasError('required')">
+          {{ 'Field required' | translate }}
+        </mat-error>
+        <mat-error *ngIf="responsibleControl.hasError('incorrect')">
+          {{ 'Invalid resource' | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'Delegate' | translate}}</mat-label>
+        <input type="text" onClick="this.setSelectionRange(0, this.value.length)"
+               placeholder=""
+               matInput
+               [formControl]="delegateControl"
+               [matAutocomplete]="delegate"
+               spellcheck="false">
+        <mat-autocomplete #delegate="matAutocomplete" [displayWith]="displayName">
+          <mat-option *ngFor="let r of delegates$ | async" [value]="r">
+            {{r.displayName}}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="delegateControl.hasError('incorrect')">
+          {{ 'Invalid resource' | translate }}
+        </mat-error>
+        <mat-hint>{{ 'Leave blank to delegate the on-call duty' | translate }}</mat-hint>
+      </mat-form-field>
+
+    </div>
+    <div class="h-8 flex justify-center">
+      <span class="text-red-700 font-bold text-lg">{{errorMessage | translate}}</span>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close [disabled]="saving">{{ 'Cancel' | translate }}</button>
+    <button mat-raised-button type="submit" color="primary" [disabled]="isInvalid()" >{{ (!!data ? 'Edit' : 'Add') | translate }}</button>
+  </mat-dialog-actions>
+</form>

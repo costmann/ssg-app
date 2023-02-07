@@ -1,0 +1,99 @@
+<div class="text-2xl font-bold px-1 py-1">{{ 'Users' | translate}}</div>
+<div class="mat-elevation-z8">
+
+  <mat-toolbar class="bg-transparent">
+
+    <div class="flex space-x-4 text-sm items-center mt-5">
+      <mat-form-field>
+        <mat-label>{{'Search' | translate}}</mat-label>
+        <input matInput placeholder="{{'Search' | translate}}" type="text" placeholder="{{'Name, Surname or Username' | translate}}" autocomplete="off" [(ngModel)]="filter" #search>
+        <button [class.invisible]="!filter" matSuffix mat-icon-button (click)="clearSearch()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+    <span class="flex-auto"></span>
+    <div class="mr-2">
+      <button mat-raised-button (click)="openDialog()" color="primary">
+        <div class="flex items-center space-x-2">
+          <mat-icon class="material-icons-outlined">person_add</mat-icon>
+          <span>{{'Add' | translate}}</span>
+        </div>
+      </button>
+    </div>
+
+  </mat-toolbar>
+  <div class="h-1">
+    <mat-progress-bar mode="indeterminate" mode="query" *ngIf="dataSource.loading$ | async as loading"></mat-progress-bar>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="table-container">
+    <table mat-table [dataSource]="dataSource">
+
+      <ng-container matColumnDef="userName">
+        <th mat-header-cell *matHeaderCellDef>{{ 'Username' | translate }}</th>
+        <td mat-cell *matCellDef="let e" >
+          <span class="font-bold">{{e.userName}}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="surname">
+        <th mat-header-cell *matHeaderCellDef>{{ 'Surname' | translate }}</th>
+        <td mat-cell *matCellDef="let e" >
+          {{e.surname}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>{{ 'Name' | translate }}</th>
+        <td mat-cell *matCellDef="let e" >
+          {{e.name}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>{{ 'Email' | translate }}</th>
+        <td mat-cell *matCellDef="let e" >
+          {{e.email}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell *matHeaderCellDef>{{ 'Phone' | translate }}</th>
+        <td mat-cell *matCellDef="let e" >
+          {{e.telephoneNumber}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="roles">
+        <th mat-header-cell *matHeaderCellDef>{{ 'Role' | translate }}</th>
+        <td mat-cell *matCellDef="let e" >
+          {{getRoles(e.roles)}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let e">
+          <div class="flex justify-end space-x-4" *ngIf="currentRow === e">
+            <button mat-stroked-button (click)="openDialog(e)" matTooltip="{{'Edit' | translate}}" matTooltipClass="app-tooltip" color="primary">
+              <mat-icon class="material-icons-outlined">edit</mat-icon>
+            </button>
+            <!-- <button *ngIf="!e.deleted" (click)="deleteDialog(e)" color="warn" mat-stroked-button matTooltip="{{ (e.issueCount === 0 ? 'Delete forever' : 'Disable') | translate}}" matTooltipClass="app-tooltip">
+              <mat-icon class="material-icons-outlined">{{ e.issueCount === 0 ? 'delete_forever' : 'delete' }}</mat-icon>
+            </button> -->
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="custom-arrow"></tr>
+      <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="cursor-default hover:bg-gray-100" (mouseover)="onMouseEvent(element)" (mouseleave)="onMouseEvent()"></tr>
+    </table>
+  </div>
+  <div class="bg-slate-200 text-brand-secondary h-14 px-4 font-semibold flex items-center justify-start space-x-1">
+    <ng-container *ngIf="!!(dataSource.length$ | async)">
+      <div>{{ 'Users found' | translate}}:</div>
+      <div>{{dataSource.length$ | async}}</div>
+    </ng-container>
+  </div>
+</div>

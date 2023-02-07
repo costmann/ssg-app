@@ -1,0 +1,33 @@
+table {
+  width: 100%;
+}
+
+.table-container {
+  position: relative;
+  // height: auto !important;
+  height: calc(100vh - 280px);
+  overflow-y: auto;
+  overflow-x: auto;
+  background-color: white;
+}
+
+.search-form-field {
+  width: 200px;
+}
+
+.mat-column-businessName {
+  padding-left: 10px;
+}
+
+.mat-column-recipients {
+  flex: 0 0 80px !important;
+  width: 80px !important;
+  text-align: end;
+  padding-right: 10px;
+}
+
+.mat-column-actions {
+  flex: 0 0 190px !important;
+  width: 190px !important;
+  text-align: end;
+}

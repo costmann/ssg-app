@@ -1,0 +1,17 @@
+.sidenav-container {
+  position: relative;
+  height: 100%;
+  overflow-y: auto !important;
+}
+
+.page-container {
+  height: calc(100% - 1rem);
+  overflow-y: auto !important;
+  margin: 0.5rem/* 8px */;
+  padding: 0.5rem/* 8px */;
+}
+
+.default-container {
+  margin: 1rem/* 16px */;
+}
+

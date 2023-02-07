@@ -1,0 +1,2 @@
+<app-issues-list (openIssue)="openIssue($event)" *ngIf="!currentIssue"></app-issues-list>
+<app-issue *ngIf="!!currentIssue" [id]="currentIssue.id" (closeIssue)="closeIssue()"></app-issue>

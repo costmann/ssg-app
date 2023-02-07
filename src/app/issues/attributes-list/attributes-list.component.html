@@ -1,0 +1,38 @@
+<div class="px-4 py-4 border-2 border-brand-primary rounded-xl" *ngIf="attributes.length > 0">
+  <form *ngIf="attributes.length > 0" [formGroup]="form" (ngSubmit)="onSubmitAttributes()">
+    <h2>{{ 'Additional info' | translate}}</h2>
+    <div class="grid grid-cols-5 gap-4">
+
+      <ng-container *ngFor="let a of attributes">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ a.name }}</mat-label>
+
+          <input matInput *ngIf="a.dataTypeElement === 'input'" formControlName="{{a.id}}" type="{{a.dataTypeInput}}" autocomplete="off" [required]="a.required" >
+
+          <textarea matInput *ngIf="a.dataTypeElement === 'textarea'" formControlName="{{a.id}}" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" autocomplete="off" [required]="a.required"></textarea>
+
+          <mat-select *ngIf="a.dataTypeElement === 'select'" formControlName="{{a.id}}" [required]="a.required">
+            <mat-option *ngIf="!a.required"></mat-option>
+            <mat-option *ngFor="let i of (observables[a.dataTypeName] | async)" [value]="i.id">
+              {{ i.description | translate }}
+            </mat-option>
+          </mat-select>
+
+        </mat-form-field>
+      </ng-container>
+
+    </div>
+
+    <div class="flex justify-end">
+      <button mat-raised-button class="bg-slate-200">
+        <mat-icon>save</mat-icon>
+        {{'Save' | translate}}
+      </button>
+    </div>
+    <!-- <div class="mt-5">
+      <mat-divider></mat-divider>
+    </div> -->
+
+  </form>
+</div>
+

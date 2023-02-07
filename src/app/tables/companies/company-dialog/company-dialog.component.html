@@ -1,0 +1,26 @@
+<h2 mat-dialog-title>{{ (!!data ? 'Edit Company'  : 'Add Company') | translate }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+  <mat-dialog-content class="mat-typography">
+    <div class="flex flex-col space-y-4">
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{'Name' | translate}}</mat-label>
+        <input [formControl]="nameControl" matInput required maxlength="255" autocomplete="off">
+        <mat-error *ngIf="nameControl.hasError('required')">
+          {{ 'Name is required' | translate }}
+        </mat-error>
+      </mat-form-field>
+
+    </div>
+    <div class="h-8 flex justify-center">
+      <span class="text-red-700 font-bold text-lg">{{errorMessage | translate}}</span>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close [disabled]="saving">{{ 'Cancel' | translate }}</button>
+    <button mat-raised-button type="submit" color="primary" [disabled]="form.invalid || saving || !form.touched" >{{ (!!data ? 'Edit' : 'Add') | translate }}</button>
+  </mat-dialog-actions>
+</form>
+

@@ -1,0 +1,57 @@
+table {
+  width: 100%;
+}
+
+.table-container {
+  position: relative;
+  // height: auto !important;
+  height: calc(100vh - 280px);
+  overflow-y: auto;
+  overflow-x: auto;
+  background-color: white;
+}
+
+// .search-form-field {
+//   width: 200px;
+// }
+
+.mat-column-userName {
+  padding-left: 5px;
+  flex: 0 0 160px !important;
+  width: 160px !important;
+}
+
+.mat-column-surname {
+  padding-left: 5px;
+  flex: 0 0 150px !important;
+  width: 150px !important;
+}
+
+.mat-column-name {
+  padding-left: 5px;
+  flex: 0 0 150px !important;
+  width: 150px !important;
+}
+
+.mat-column-phone {
+  padding-left: 5px;
+  flex: 0 0 150px !important;
+  width: 150px !important;
+}
+
+.mat-column-roles {
+  padding-left: 5px;
+  flex: 0 0 300px !important;
+  width: 300px !important;
+}
+
+.mat-column-actions {
+  flex: 0 0 100px !important;
+  width: 100px !important;
+  text-align: end;
+}
+
+.mat-column-email {
+  padding-left: 5px;
+}
+

@@ -1,0 +1,45 @@
+table {
+  width: 100%;
+}
+
+.table-container {
+  position: relative;
+  // height: auto !important;
+  height: calc(100vh - 280px);
+  overflow-y: auto;
+  overflow-x: auto;
+  background-color: white;
+}
+
+.search-form-field {
+  width: 200px;
+}
+
+.mat-column-code {
+  flex: 0 0 100px !important;
+  width: 100px !important;
+}
+
+
+.mat-column-site {
+  padding-left: 10px;
+  flex: 0 0 140px !important;
+  width: 140px !important;
+}
+
+.mat-column-name {
+  padding-left: 10px;
+}
+
+.mat-column-issues {
+  flex: 0 0 80px !important;
+  width: 80px !important;
+  text-align: end;
+  padding-right: 10px;
+}
+
+.mat-column-actions {
+  flex: 0 0 190px !important;
+  width: 190px !important;
+  text-align: end;
+}

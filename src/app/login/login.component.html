@@ -1,0 +1,60 @@
+<div class="flex min-h-screen bg-gradient-to-b from-brand-primary via-brand-secondary to-brand-primary">
+  <form name="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()"
+    class="mx-6 my-auto sm:m-auto flex flex-col items-center w-auto px-0 pb-6 pt-2 bg-white rounded-lg sm:w-96">
+
+    <div class="h-1 w-full">
+      <mat-progress-bar *ngIf="loggingIn" mode="indeterminate"></mat-progress-bar>
+    </div>
+
+    <div class="flex flex-col items-center my-6 map rounded-lg">
+      <img class="h-24" src="assets/enel-egp.svg">
+    </div>
+
+    <div class="flex flex-col space-y-4 w-full px-6">
+
+      <div>
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{'Username' | translate}}</mat-label>
+          <input matInput type="text" #username autocomplete="off" name="username" placeholder="" [formControl]="userFormControl" required>
+          <mat-icon matSuffix class="material-icons-outlined">person</mat-icon>
+          <mat-error *ngIf="userFormControl.hasError('required')">
+            {{ 'Username is required' | translate }}
+          </mat-error>
+          <!-- <mat-hint *ngIf="!username.value">Inserisci il tuo nome utente</mat-hint> -->
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{'Password' | translate}}</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" #password placeholder="" name="password" [formControl]="passwordFormControl" required>
+          <mat-icon matSuffix class="material-icons-outlined" (click)="hidePassword = !hidePassword" style="cursor: pointer;">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          <!-- <mat-hint *ngIf="!password.value">Inserisci la tua password</mat-hint> -->
+          <mat-error *ngIf="passwordFormControl.hasError('required')">
+            {{ 'Password is required' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-slide-toggle [formControl]="rememberFormControl" color="warn">{{ 'Remember me' | translate }}</mat-slide-toggle>
+
+      <button mat-raised-button color="primary" class="w-full" [disabled]="loggingIn">
+        <span>{{ loggingIn ? ('Please wait...' | translate) : loginFailed ? ('Try again' | translate) : ('Login' | translate) }}</span>
+      </button>
+
+    </div>
+
+    <div class="flex items-center mt-4 h-10 w-full">
+      <div class="w-full text-center mx-6 px-0 py-2" role="alert" *ngIf="!!errorMessage">
+        <strong class="font-medium text-xs sm:text-base text-red-700">{{ errorMessage | translate }}</strong>
+      </div>
+    </div>
+
+    <div class="flex justify-center h-8 w-full" *ngIf="canRecoveryPassword">
+      <div class="w-full text-center">
+        <button mat-button color="primary" (click)="onPasswordLost()" type="button" [disabled]="loggingIn" class="focus:outline-none">
+          {{ 'Password forgotten?' | translate }}
+        </button>
+      </div>
+    </div>
+
+  </form>
+</div>

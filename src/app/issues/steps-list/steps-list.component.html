@@ -1,0 +1,58 @@
+<!-- <div class="text-2xl font-extralight px-1 py-1">{{ 'Event log' | translate}}</div> -->
+<div class="px-4 py-4 border-2 border-brand-primary rounded-xl" *ngIf="!!(dataSource.length$ | async)">
+  <div class="h-1">
+    <mat-progress-bar mode="indeterminate" mode="query" *ngIf="dataSource.loading$ | async as loading"></mat-progress-bar>
+  </div>
+  <div class="table-container">
+    <h2>{{ 'Steps' | translate}}</h2>
+    <table mat-table [dataSource]="dataSource">
+
+      <ng-container matColumnDef="datetime">
+        <th mat-header-cell *matHeaderCellDef>{{ 'Date/Time' | translate }}</th>
+        <td mat-cell *matCellDef="let e" >
+          <span>{{e.createdAt | date:'dd/MM/yy HH:mm'}}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="state">
+        <th mat-header-cell *matHeaderCellDef>{{ 'State' | translate }}</th>
+        <td mat-cell *matCellDef="let e" >
+          {{e.stateName | translate }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="recipient">
+        <th mat-header-cell *matHeaderCellDef>{{ 'Recipient' | translate }}</th>
+        <td mat-cell *matCellDef="let e" >
+          <span *ssgUser="e.recipientUser; let name = name">{{name}}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="notes">
+        <th mat-header-cell *matHeaderCellDef>{{ 'Notes' | translate }}</th>
+        <td mat-cell *matCellDef="let e" >
+          <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" [readonly]="true">{{e.notes}}</textarea>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="user">
+        <th mat-header-cell *matHeaderCellDef>{{ 'Author' | translate }}</th>
+        <td mat-cell *matCellDef="let e" >
+          <span *ssgUser="e.createdBy; let name = name">{{name}}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let e; let i = index">
+          <button *ngIf="i === 0 && authorized(e)" mat-stroked-button (click)="editStep(e)" matTooltip="{{'Edit' | translate}}" matTooltipClass="app-tooltip" color="primary">
+            <mat-icon class="material-icons-outlined">edit_note</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="custom-arrow"></tr>
+      <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="cursor-default hover:bg-gray-100"></tr>
+    </table>
+  </div>
+</div>
