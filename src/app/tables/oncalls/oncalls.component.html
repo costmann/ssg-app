@@ -14,7 +14,6 @@
         <input matInput type="number" placeholder="{{'Week' | translate}}" autocomplete="off" min="1" max="53" required [(ngModel)]="filter.week" (change)="applyFilter()">
         <mat-hint>
           <span class="text-xs">{{ ISOweekStart() | date:'dd/MM/yy hh:mm' }} - {{ ISOweekEnd() | date:'dd/MM/yy hh:mm' }}</span>
-        
         </mat-hint>
       </mat-form-field>
 
@@ -75,7 +74,7 @@
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let e">
           <div class="flex justify-end space-x-4" *ngIf="currentRow === e">
-            <button (click)="deleteDialog(e)" color="warn" mat-stroked-button matTooltip="{{ 'Delete' | translate}}" matTooltipClass="app-tooltip">
+            <button (click)="deleteDialog(e)" color="warn" mat-icon-button matTooltip="{{ 'Delete' | translate}}" matTooltipClass="app-tooltip">
               <mat-icon class="material-icons-outlined">delete</mat-icon>
             </button>
 

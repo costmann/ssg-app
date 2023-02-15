@@ -2,15 +2,7 @@
 <mat-dialog-content class="mat-typography">
 
   <div class="mb-2">
-
-    <!-- <mat-toolbar class="h-10 bg-white">
-      <span class="flex-auto"></span>
-      <button mat-stroked-button *ngIf="!!idControl.value" (click)="addAttribute(formDirective)">
-        <mat-icon class="material-icons-outlined">add</mat-icon>
-        {{ 'Add' | translate }}
-      </button>
-    </mat-toolbar> -->
-
+    
     <div class="h-[253px] overflow-y-scroll  ">
 
       <table mat-table [dataSource]="attributes$" class="w-full">
