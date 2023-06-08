@@ -4,19 +4,62 @@
     <span>{{'Create new incident' | translate}}</span>
   </div>
   <div>
-    <!-- <button mat-icon-button mat-dialog-close matTooltip="{{'Close' | translate}}">
-      <mat-icon class="material-icons-outlined text-white">close</mat-icon>
-    </button> -->
     <mat-icon class="material-icons-outlined text-white cursor-pointer hover:bg-slate-500 mr-2 mt-[6px]" mat-dialog-close>close</mat-icon>
   </div>
 </div>
 
-<form [formGroup]="form" class="px-6 py-6" (ngSubmit)="onSubmit()">
-
-
+<div *ngIf="selectingUser">
   <mat-dialog-content class="mat-typography">
+    <div class="flex flex-col space-y-4" >
+      <div class="flex space-x-2 justify-between">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'Ticket opening on behalf of' | translate}}</mat-label>
+          <input matInput type="text" cdkFocusInitial [(ngModel)]="findSurname" autocomplete="off" (keydown.enter)="searchCandidates()" placeholder="{{ 'myself' | translate}}" #search>
+          <button *ngIf="findSurname" matSuffix mat-icon-button aria-label="Clear" (click)="clear()">
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-hint>{{ 'Search by surname' | translate }}</mat-hint>
+        </mat-form-field>
+        <div class="mt-3">
+          <button mat-raised-button (click)="searchCandidates()" color="primary" [disabled]="findSurname.length < 2"  >
+            <mat-icon class="material-icons-outlined">search</mat-icon>
+            {{ 'Search' | translate }}
+          </button>
+        </div>
+      </div>
 
-    <div class="flex flex-col space-y-4">
+      <div class="h-52 rounded-sm border-2">
+        <mat-selection-list *ngIf="(users$ | async) as users; else loading" multiple="false" (selectionChange)="onSelection($event)">
+          <cdk-virtual-scroll-viewport [itemSize]="20" class="h-48 ">
+            <mat-list-option *ngFor="let u of users" [value]="u">
+              <span>{{u.displayName}} [{{ u.userName }}]</span>
+            </mat-list-option>
+          </cdk-virtual-scroll-viewport>
+        </mat-selection-list>
+        <div class="h-1 w-full">
+          <ng-template #loading>
+            <mat-progress-bar mode="indeterminate" *ngIf="searching"></mat-progress-bar>
+          </ng-template>
+        </div>
+      </div>
+
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-raised-button color="primary" [disabled]="canGoNext() === false" (click)="goNext()">{{ 'Next' | translate }}</button>
+  </mat-dialog-actions>
+</div>
+
+<form [formGroup]="form" class="px-4 py-0" *ngIf="!selectingUser">
+  <mat-dialog-content class="mat-typography">
+    <div class="flex flex-col space-y-2">
+
+      <div class="flex space-x-2 items-center">
+        <span>{{ 'Issued by' | translate }}</span>
+        <span class="font-bold">{{ getRecipientName() }}</span>
+      </div>
+
       <mat-form-field appearance="outline">
         <mat-label>{{ 'Thematic area' | translate}}</mat-label>
         <mat-select [formControl]="areaControl" name="area" cdkFocusInitial required (selectionChange)="areaChanged($event)">
@@ -59,9 +102,9 @@
       </mat-form-field>
 
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
         <mat-label>{{ 'Notes' | translate }}</mat-label>
-        <textarea matInput rows="5" [formControl]="notesControl" ></textarea>
+        <textarea matInput rows="3" [formControl]="notesControl" ></textarea>
       </mat-form-field>
     </div>
 
@@ -72,8 +115,11 @@
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <!-- <button mat-button mat-dialog-close>{{'Cancel' | translate}}</button> -->
-    <button mat-raised-button type="submit" color="primary" [disabled]="isInvalid()">{{ 'Save' | translate }}</button>
+    <div class="flex space-x-2 items-center">
+      <button mat-button (click)="goBack()" *ngIf="canChangeOwner">{{ 'Back' | translate }}</button>
+      <button mat-raised-button type="submit" color="primary" [disabled]="isInvalid()" (click)="onSubmit()">{{ 'Save' | translate }}</button>
+    </div>
+
   </mat-dialog-actions>
 </form>
 

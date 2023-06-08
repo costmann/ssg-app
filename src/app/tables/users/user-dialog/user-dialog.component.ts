@@ -1,12 +1,11 @@
 import { AppRole, AppUser } from 'src/app/models/app-user';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable, debounceTime, distinctUntilChanged, first, of, startWith, switchMap, map } from 'rxjs';
+import { Observable, first, map } from 'rxjs';
 
 import { AppUserService } from 'src/app/services/app-user.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { RequireMatch } from 'src/app/validators/require-match';
-import { environment } from 'src/environments/environment';
 import { MatSelectionListChange } from '@angular/material/list';
 
 @Component({
@@ -155,4 +154,12 @@ export class UserDialogComponent implements OnInit {
     this.userControl.setValue(u)
   }
 
+  getUserName(): string {
+    if(!!this.userControl.value) {
+      const u: AppUser = this.userControl.value
+      return `${u.displayName} - ${u.userName}`
+    } else {
+      return ''
+    }
+  }
 }

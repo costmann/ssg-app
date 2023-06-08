@@ -1,13 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable, debounceTime, distinctUntilChanged, first, of, startWith, switchMap } from 'rxjs';
+import { Observable, debounceTime, distinctUntilChanged, first, interval, map, of, startWith, switchMap, timer } from 'rxjs';
 
+import { AppUser } from 'src/app/models/app-user';
+import { AppUserService } from 'src/app/services/app-user.service';
 import { Area } from 'src/app/models/area';
 import { AreaService } from 'src/app/services/area.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { IssueService } from 'src/app/services/issue.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
+import { MatSelectionListChange } from '@angular/material/list';
 import { Plant } from 'src/app/models/plant';
 import { PlantService } from 'src/app/services/plant.service';
 import { RequireMatch } from 'src/app/validators/require-match';
@@ -25,6 +29,7 @@ export class CreateIssueDialogComponent implements OnInit {
 
   filteredPlants$: Observable<Plant[]>
 
+  recipientControl: FormControl
   areaControl: FormControl
   plantControl: FormControl
   descriptionControl: FormControl
@@ -36,12 +41,32 @@ export class CreateIssueDialogComponent implements OnInit {
   saving = false
   errorMessage = ''
 
+  //recipient: string | undefined
+
+  selectingUser: boolean
+
+  //selectedUser: AppUser | null = null
+
+  findSurname = ''
+  searching = false
+  canChangeOwner: boolean
+
+  users$ = new Observable<AppUser[]>()
+
+
+
+  @ViewChild('search') search!: ElementRef
+
   constructor(
     public dialogRef: MatDialogRef<CreateIssueDialogComponent>,
     private issueService: IssueService,
     areaService: AreaService,
-    plantService: PlantService
+    plantService: PlantService,
+    private userService: AppUserService,
+    private authService: AuthService
   ) {
+
+    this.recipientControl = new FormControl(null)
     this.areaControl = new FormControl(null, [Validators.required])
     this.plantControl = new FormControl({value: null, disabled: true}, [Validators.required, RequireMatch])
     this.descriptionControl = new FormControl(null, [Validators.required])
@@ -64,11 +89,16 @@ export class CreateIssueDialogComponent implements OnInit {
     )
 
     this.form = new FormGroup({
+      recipient: this.recipientControl,
       area: this.areaControl,
       plant: this.plantControl,
       description: this.descriptionControl,
       notes: this.notesControl,
     })
+
+    this.canChangeOwner = authService.isInRole(['61','62', '63'])
+    this.selectingUser = this.canChangeOwner
+
   }
 
   ngOnInit(): void {
@@ -124,6 +154,61 @@ export class CreateIssueDialogComponent implements OnInit {
 
     this.plantControl.updateValueAndValidity()
 
+  }
+
+  canGoNext(): boolean {
+    return !this.findSurname || !!this.recipientControl.value
+  }
+
+  goNext(): void {
+    this.selectingUser = false
+  }
+
+  searchCandidates(): void {
+    this.searching = true
+    this.users$ = this.userService.getCandidateUsers({ surname: this.findSurname }).pipe(
+      map(results => {
+        this.searching = false
+        return results
+      })
+    )
+  }
+
+  clear(): void {
+    this.findSurname = ''
+    this.users$ = new Observable<AppUser[]>()
+    // this.selectedUser = null
+    this.recipientControl.setValue(null)
+    //this.userControl.setValue(null)
+  }
+
+  onSelection(e: MatSelectionListChange): void {
+    const u: AppUser = e.options[0].value
+    // this.selectedUser = e.options[0].value
+    this.recipientControl.setValue(u)
+    //this.userControl.setValue(u)
+  }
+
+  goBack(): void {
+    this.selectingUser = true
+    this.clear()
+
+    timer(50, -1).pipe(first()).subscribe(x => {
+      this.search.nativeElement.focus()
+    })
+
+  }
+
+  getRecipientName(): string {
+    if (!!this.recipientControl.value) {
+      return this.recipientControl.value.displayName
+    } else {
+      if (!!this.authService.userValue) {
+        return this.authService.userValue?.displayName
+      } else {
+        return ''
+      }
+    }
   }
 
 }

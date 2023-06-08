@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>{{ (!!data ? 'Edit user' : 'Add new user') | translate }}</h2>
 
-<div class="flex flex-col space-y-0" *ngIf="!data">
+<div class="flex flex-col space-y-0 py-2" *ngIf="!data">
   <div class="flex space-x-2 mx-4">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>{{ 'Search' | translate}}</mat-label>
@@ -35,8 +35,12 @@
 
 <form [formGroup]="form" (ngSubmit)="save()">
   <mat-dialog-content class="mat-typography">
-    <div class="flex flex-col space-y-0">
-      <mat-form-field [class.invisible]="!userControl.value" appearance="outline">
+    <div class="flex flex-col space-y-2">
+
+      <div class="h-6 text-center">
+        <h2 class="font-bold">{{ getUserName() }}</h2>
+      </div>
+      <!-- <mat-form-field [class.invisible]="!userControl.value" appearance="outline">
         <mat-label>{{ 'User' | translate}}</mat-label>
         <input type="text"
                matInput
@@ -56,9 +60,9 @@
         <mat-error *ngIf="userControl.hasError('incorrect')">
           {{ 'Invalid user' | translate }}
         </mat-error>
-      </mat-form-field>
+      </mat-form-field> -->
 
-      <h3>{{ 'Roles' | translate }}</h3>
+      <h2>{{ 'Roles' | translate }}</h2>
 
       <mat-selection-list [formControl]= "roleControl">
         <mat-list-option *ngFor="let r of roles$ | async" [value]="r.id">

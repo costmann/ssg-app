@@ -37,13 +37,14 @@ export class IssueService implements ApiResultService<Issue> {
   }
 
   post(data: any): Observable<Issue> {
-    console.dir(data)
-    return this.http.post<Issue>(`${environment.apiUrl}/Issues`, {
+    const send = {
+      issuedBy: !!data.recipient ? data.recipient.userName : null,
       areaId: data.area.id,
       plantId: !!data.plant ? data.plant.id : null,
       description: data.description,
       notes: data.notes,
-    })
+    }
+    return this.http.post<Issue>(`${environment.apiUrl}/Issues`, send)
   }
 
   put(data: any): Observable<any> {

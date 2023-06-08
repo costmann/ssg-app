@@ -138,5 +138,9 @@
   "True": "Sì",
   "False": "No",
   "Not available": "Non disponibile",
-  "Steps": "Passaggi"
+  "Steps": "Passaggi",
+  "Ticket opening on behalf of": "Apertura nuovo ticket per conto di",
+  "myself":"me stesso",
+  "Next": "Avanti",
+  "Back": "Indietro"
 }
