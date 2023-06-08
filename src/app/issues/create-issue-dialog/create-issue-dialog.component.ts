@@ -122,6 +122,8 @@ export class CreateIssueDialogComponent implements OnInit {
       }
     }
 
+    this.plantControl.updateValueAndValidity()
+
   }
 
 }
