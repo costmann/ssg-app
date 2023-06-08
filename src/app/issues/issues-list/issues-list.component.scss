@@ -6,7 +6,7 @@ table {
   position: relative;
   // height: auto !important;
   height: calc(100vh - 280px);
-  overflow-y: auto;
+  overflow-y: scroll;
   overflow-x: auto;
   background-color: white;
 }

@@ -2,7 +2,7 @@
   <mat-sidenav #sidenav [opened]="opened" [mode]="mode" class="bg-[#2C2C2C] border-0" [ngClass]="{'w-[216px]' : extended, 'w-[64px]' : !extended}">
 
 
-    <div [ngClass]="{'ml-3': !extended, 'flex justify-between mx-2 items-center': extended}" class="mt-2">
+    <div [ngClass]="{'ml-2': !extended, 'flex justify-between mx-2 items-center': extended}" class="mt-2">
       <img src="assets/enel-logo.png" alt="logo enel" class="ml-2 h-7 hidden sm:inline" *ngIf="extended">
       <button mat-icon-button (click)="toggle()" matTooltipDisabled="true" matTooltip="{{ (extended ? 'Collapse' : 'Expand') | translate}}" class="hover:bg-black">
         <mat-icon class="material-icons-outlined text-white">{{extended ? 'arrow_back_ios' : 'menu'}}</mat-icon>

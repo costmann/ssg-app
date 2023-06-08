@@ -4,9 +4,10 @@
     <span>{{ data.issue.code | translate}}</span>
   </div>
   <div>
-    <button mat-icon-button matTooltip="{{'Close' | translate}}" (click)="cancel()">
+    <!-- <button mat-icon-button matTooltip="{{'Close' | translate}}" (click)="cancel()">
       <mat-icon class="material-icons-outlined text-white">close</mat-icon>
-    </button>
+    </button> -->
+    <mat-icon class="material-icons-outlined text-white cursor-pointer hover:bg-slate-500 mr-2 mt-[6px]" mat-dialog-close>close</mat-icon>
   </div>
 </div>
 

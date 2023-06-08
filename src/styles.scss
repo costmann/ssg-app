@@ -20,6 +20,11 @@ $ssg-app-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
 // The warn palette is optional (defaults to red).
 $ssg-app-warn: mat.define-palette(mat.$red-palette);
 
+
+$ssg-app-typography: mat.define-typography-config(
+  $font-family: 'Nunito'
+);
+
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
 $ssg-app-theme: mat.define-light-theme((
@@ -27,7 +32,8 @@ $ssg-app-theme: mat.define-light-theme((
     primary: $ssg-app-primary,
     accent: $ssg-app-accent,
     warn: $ssg-app-warn,
-  )
+  ),
+  typography: $ssg-app-typography,
 ));
 
 // Include theme styles for core and each component used in your app.
@@ -84,7 +90,7 @@ body { margin: 0; font-family: 'nunito', sans-serif;}
   padding: 6px !important;
   font-size: medium;
   font-weight: bold;
-  background-color: #387a5b;
+  // background-color: #387a5b;
   color: #667790;
 }
 
