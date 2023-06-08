@@ -2,8 +2,9 @@
   <img src="assets/enel-egp.svg" class="ml-0 h-10 hidden sm:inline" *ngIf="!extended">
   <span class="text-brand-secondary overflow-hidden text-ellipsis ml-2">{{ title | translate }}</span>
   <span class="flex-auto"></span>
-  <div class="flex space-x-0 items-center" *ngIf="!!user">
-    <span class="text-xs hidden sm:inline">{{ user.displayName }}</span>
+  <div class="flex space-x-1 items-center" *ngIf="!!user">
+
+    <span class="cursor-default text-xs" matTooltip="{{ user.name }}">{{ user.displayName }}</span>
 
     <button mat-icon-button [matMenuTriggerFor]="menu">
       <mat-icon class="material-icons-outlined text-brand-secondary">account_circle</mat-icon>
@@ -11,8 +12,10 @@
 
     <mat-menu #menu="matMenu">
       <button mat-menu-item class="focus:outline-none" (click)="logout.emit()">
-        <mat-icon>logout</mat-icon>
-        <span>{{ 'Logout' | translate}} {{user.name}}</span>
+        <div class="flex space-x-1 items-center">
+          <mat-icon>logout</mat-icon>
+          <span>{{ 'Logout' | translate}}</span>
+        </div>
       </button>
     </mat-menu>
   </div>
