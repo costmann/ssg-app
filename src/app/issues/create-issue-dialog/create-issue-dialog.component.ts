@@ -166,7 +166,7 @@ export class CreateIssueDialogComponent implements OnInit {
 
   searchCandidates(): void {
     this.searching = true
-    this.users$ = this.userService.getCandidateUsers({ surname: this.findSurname }).pipe(
+    this.users$ = this.userService.findUsers({ surname: this.findSurname, userName: this.findSurname }).pipe(
       map(results => {
         this.searching = false
         return results

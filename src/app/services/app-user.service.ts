@@ -108,6 +108,16 @@ export class AppUserService implements ArrayResultService<AppUser>   {
     )
   }
 
+  findUsers(data: any): Observable<AppUser[]> {
+    return this.http.post<any[]>(`${environment.authUrl}/user/findAll/${environment.domain}`, data).pipe(
+      map(r => {
+        return r
+        .map(user => this.mapUser(user))
+        .sort((a,b) => (a.displayName > b.displayName) ? 1 : ((b.displayName > a.displayName) ? -1 : 0))
+      })
+    )
+  }
+
   setRoles(data: any): Observable<AppUser> {
     return this.http.post<any>(`${environment.authUrl}/user/save`, data).pipe(
       map(user => {return this.mapUser(user)})

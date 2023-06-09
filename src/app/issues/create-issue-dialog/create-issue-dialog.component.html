@@ -18,7 +18,7 @@
           <button *ngIf="findSurname" matSuffix mat-icon-button aria-label="Clear" (click)="clear()">
             <mat-icon>close</mat-icon>
           </button>
-          <mat-hint>{{ 'Search by surname' | translate }}</mat-hint>
+          <mat-hint>{{ 'Search by surname or id number' | translate }}</mat-hint>
         </mat-form-field>
         <div class="mt-3">
           <button mat-raised-button (click)="searchCandidates()" color="primary" [disabled]="findSurname.length < 2"  >

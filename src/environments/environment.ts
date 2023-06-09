@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  authUrl: 'http://15.161.4.167/EGPAuthentication/api',
+  authUrl: 'http://localhost:5050/api', //'http://15.161.4.167/EGPAuthentication/api',
   emailUrl: 'http://15.161.4.167/EGPMessenger/api',
   apiUrl: 'https://localhost:7138/api',
   appName: 'SSG',

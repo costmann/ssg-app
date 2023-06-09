@@ -117,7 +117,8 @@ export class UserDialogComponent implements OnInit {
   findCandidates(surname: string): Observable<AppUser[]> {
 
     const query = {
-      surname: surname
+      surname: surname,
+      userName: surname
     }
 
     return this.userService.getCandidateUsers(query)

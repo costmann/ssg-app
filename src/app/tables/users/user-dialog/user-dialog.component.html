@@ -4,7 +4,7 @@
   <div class="flex space-x-2 mx-4">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>{{ 'Search' | translate}}</mat-label>
-      <input matInput type="text" cdkFocusInitial [(ngModel)]="findSurname" autocomplete="off" (keydown.enter)="searchCandidates()" placeholder="{{ 'Search by surname' | translate}}" >
+      <input matInput type="text" cdkFocusInitial [(ngModel)]="findSurname" autocomplete="off" (keydown.enter)="searchCandidates()" placeholder="{{ 'Search by surname or id number' | translate}}" >
       <button *ngIf="findSurname" matSuffix mat-icon-button aria-label="Clear" (click)="clear()">
         <mat-icon>close</mat-icon>
       </button>
